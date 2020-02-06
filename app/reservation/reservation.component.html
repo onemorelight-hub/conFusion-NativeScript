@@ -1,0 +1,65 @@
+<ActionBar title="Reserve Table" class="action-bar">
+     <!-- 
+    Use the NavigationButton as a side-drawer button in Android
+    because ActionItems are shown on the right side of the ActionBar
+    -->
+    <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
+    <!-- 
+    Use the ActionItem for IOS with position set to left. Using the
+    NavigationButton as a side-drawer button in iOS is not possible,
+    because its function is to always navigate back in the application.
+    -->
+    <ActionItem icon="res://menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
+        ios.position="left">
+    </ActionItem>   
+</ActionBar>
+<RadSideDrawer #drawerComponent tkToggleNavButton showOverNavigation="true">
+    <ScrollView tkDrawerContent class="sidedrawer-left">
+        <StackLayout horizontalAlign="left">
+            <drawer-content></drawer-content>
+        </StackLayout>
+    </ScrollView>
+    <StackLayout orientation="vertical" tkMainContent class="page">
+        <GridLayout id="content"  class="m-5" rows="auto auto auto auto" columns="*, *" [formGroup]="reservation">
+            <Label class="h3 m-15" row="0" col="0" text="No. of Guests" textWrap="true"></Label>
+            <TextField class="input input-border" id="textGuests"
+                hint="Enter Number of Guests" [text]=''
+                (tap) = "createModalView('guest')"
+                (textChange)="onGuestChange($event)"
+                visibility="{{ isFormSubmited ? 'collapsed' : 'visible' }}"
+                row="0" col="1" formControlName="guests"></TextField>
+            <Label class="h3 m-15" 
+                   row="0" col="1" 
+                   visibility="{{ isFormSubmited ? 'visible' : 'collapsed' }}"
+                   text="{{reservation.value.guests}}"></Label>
+                
+            <Label class="h3 m-15" row="1" col="0" text="Smoking?" textWrap="true"></Label>
+            <Switch class="m-15" row="1" col="1" checked="false"
+                (checkedChange)="onSmokingChecked($event)" 
+                visibility="{{ isFormSubmited ? 'collapsed' : 'visible' }}"
+                formControlName="smoking"></Switch>
+            <Label class="h3 m-15" 
+                   row="1" col="1" 
+                   visibility="{{ isFormSubmited ? 'visible' : 'collapsed' }}"
+                   text="{{reservation.value.smoking ? 'Yes' : 'No'}}"></Label>
+
+            <Label class="h3 m-15" row="2" col="0" text="Date and Time" textWrap="true"></Label>
+            <TextField class="input input-border" id="textDateTime"
+                hint="Enter Date and Time" [text]=''
+                (tap)="createModalView('date-time')"
+                (textChange)="onDateTimeChange($event)"
+                visibility="{{ isFormSubmited ? 'collapsed' : 'visible' }}"
+                row="2" col="1" formControlName="dateTime"></TextField>
+            <Label class="h3 m-15" 
+                   row="2" col="1" 
+                   visibility="{{ isFormSubmited ? 'visible' : 'collapsed' }}"
+                   text="{{reservation.value.dateTime | date:'medium'}}"></Label>                    
+
+            <Button class="btn btn-primary btn-active m-15" 
+                    row="3" col="0"
+                    visibility="{{ isFormSubmited ? 'collapsed' : 'visible' }}"
+                    text="Submit" (tap)="onSubmit()"></Button>
+        </GridLayout>
+    
+    </StackLayout>
+</RadSideDrawer>
